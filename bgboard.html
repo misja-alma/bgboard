@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Backgammon Board</title>
+		<script language="JavaScript" src=src/Util.js>
+        </script>
+		<script language="JavaScript" src=src/BoardMap.js>
+        </script>
+        <script language="JavaScript" src=src/PositionRecord.js>
+        </script>
+        <script language="JavaScript" src=src/BgBoard.js>
+        </script>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <canvas id="bgboard" width="500" height="400"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" id="positionId" size="45" height="20" onBlur="reDraw();" onkeypress="return checkForEnter(event);"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="direction" checked="false" width="20" height="20" onClick="reDraw()">Clockwise
+                    </input>
+                </td>
+            </tr>
+        </table>
+        <script language="JavaScript">
+            
+            window.onload = function(){
+                reDraw();
+                var board = document.getElementById("bgboard");
+                board.addEventListener("click", boardClicked, false);
+            };
+            
+            function drawDefaultPosition(){
+                var position = createInitialPosition();
+                draw(position);
+            }
+            
+            function checkForEnter(event){
+                if (event.keyCode == 13) {
+                    reDraw();
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            
+            function boardClicked(event){
+                var x;
+                var y;
+                if (event.pageX || event.pageY) {
+                    x = event.pageX;
+                    y = event.pageY;
+                }
+                else {
+                    x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                    y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+                }
+                var board = document.getElementById("bgboard");
+                var absPosition = getAbsPosition(board);
+                x -= absPosition.x;
+                y -= absPosition.y;
+                var item = boardMap.locateItem(x, y);
+                
+                if (item.area == AREA_TURN) {
+                    currentPosition.switchTurn();
+                    var gnuId = getGnuId(currentPosition);
+                    document.getElementById("positionId").value = gnuId;
+                    draw(currentPosition);
+                }
+            }
+            
+            var boardMap;
+            var currentPosition;
+            
+            function draw(position){
+                currentPosition = position;
+                var board = document.getElementById("bgboard");
+                var context = board.getContext("2d");
+                var direction = document.getElementById("direction");
+                var isHomeBoardLeft = direction.checked;
+                boardMap = drawPosition(context, position, isHomeBoardLeft, 0, 0, 500, 400, "#FFFF00", "#00FFFF");
+            }
+            
+            function reDraw(){
+                var gnuId = document.getElementById("positionId").value;
+                if (!gnuId) {
+                    drawDefaultPosition();
+                }
+                else {
+                    var position = new PositionRecord();
+                    var posId = parsePositionId(gnuId);
+                    if (!posId) {
+                        var xgId = parseXGId(gnuId);
+                        position.initializeFromXGId(xgId);
+                    }
+                    else {
+                        var matchId = parseMatchId(gnuId);
+                        position.initializeFromId(posId, matchId);
+                    }
+                    draw(position);
+                }
+            }
+            
+            function parseXGId(xgId){
+                var index = xgId.indexOf("XGID=");
+                if (index >= 0) {
+                    return xgId.substring(index + 5);
+                }
+            }
+            
+            function parsePositionId(gnuId){
+                var index = gnuId.indexOf("Position ID: ");
+                if (index >= 0) {
+                    return gnuId.substring(index + 13);
+                }
+            }
+            
+            function parseMatchId(gnuId){
+                var index = gnuId.indexOf("Match ID: ");
+                if (index >= 0) {
+                    return gnuId.substring(index + 9);
+                }
+            }
+            
+            function getGnuId(position){
+                return "Position ID: " + position.getPositionId() + " Match ID: " + position.getMatchId();
+            }
+            
+            // Calculates the object's absolute position
+            function getAbsPosition(object){
+                var position = new Object();
+                position.x = 0;
+                position.y = 0;
+                
+                if (object) {
+                    position.x = object.offsetLeft;
+                    position.y = object.offsetTop;
+                    
+                    if (object.offsetParent) {
+                        var parentpos = getAbsPosition(object.offsetParent);
+                        position.x += parentpos.x;
+                        position.y += parentpos.y;
+                    }
+                }
+                
+                return position;
+            }
+        </script>
+    </body>
+</html>
