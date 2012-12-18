@@ -1,10 +1,28 @@
-// TODO Fill with pattern: context.fillStyle=context.createPattern(image, 'repeat');
+
+function BgBoard() {
+	this.pointPattern = new Image(); 
+	this.pointPattern.src = "images/wood.jpg"; 
+	this.myCheckerColor = "#FFFF00";
+	this.oppCheckerColor = "#00FFFF";	
+}
+
+BgBoard.prototype.setPointPatternImage = function(pointPatternImage) {
+	this.pointPattern = pointPatternImage;
+}
+
+BgBoard.prototype.setMyCheckerColor = function(color) {
+	this.myCheckerColor = color;
+}
+
+BgBoard.prototype.setOppCheckerColor = function(color) {
+	this.oppCheckerColor = color;
+}
 
 // myCheckers and oppCheckers contain the nr's of checkers for each player on each point on the board. Points are numbered from the player's own orientation
-function drawPosition(context, position, isHomeBoardLeft, x, y, boardWidth, boardHeight, myColor, oppColor){
+BgBoard.prototype.drawPosition = function(context, position, isHomeBoardLeft, x, y, boardWidth, boardHeight){
     var boardMap = new BoardMap(x, y, boardWidth, boardHeight, isHomeBoardLeft);
     
-    drawBoard(context, boardMap);
+    this.drawBoard(context, boardMap);
     
     var myCheckers = position.checkers[0];
     var oppCheckers = position.checkers[1];
@@ -18,10 +36,10 @@ function drawPosition(context, position, isHomeBoardLeft, x, y, boardWidth, boar
             myDrawNrAsText = true;
         }
         for (j = 0; j < myDrawNr; j++) {
-            drawChecker(context, i, j + 1, false, boardMap, myColor);
+            this.drawChecker(context, i, j + 1, false, boardMap, this.myCheckerColor);
         }
         if (myDrawNrAsText) {
-            drawCheckerTotal(context, i, myCheckers[i], false, boardMap);
+            this.drawCheckerTotal(context, i, myCheckers[i], false, boardMap);
         }
     }
     for (i = 0; i < oppCheckers.length; i++) {
@@ -32,10 +50,10 @@ function drawPosition(context, position, isHomeBoardLeft, x, y, boardWidth, boar
             myDrawNrAsText = true;
         }
         for (j = 0; j < oppCheckers[i]; j++) {
-            drawChecker(context, i, j + 1, true, boardMap, oppColor);
+            this.drawChecker(context, i, j + 1, true, boardMap, this.oppCheckerColor);
         }
         if (myDrawNrAsText) {
-            drawCheckerTotal(context, i, myCheckers[i], true, boardMap);
+            this.drawCheckerTotal(context, i, myCheckers[i], true, boardMap);
         }
     }
     
@@ -43,13 +61,13 @@ function drawPosition(context, position, isHomeBoardLeft, x, y, boardWidth, boar
     var color;
     if (isItMyTurn) {
         arrowX = boardMap.arrowMyTurn;
-        color = myColor;
+        color = this.myCheckerColor;
     }
     else {
         arrowX = boardMap.arrowOppTurn;
-        color = oppColor;
+        color = this.oppCheckerColor;
     }
-    drawArrow(context, arrowX, isHomeBoardLeft, color);
+    this.drawArrow(context, arrowX, isHomeBoardLeft, color);
 	
 	var diceArea;
 	if(isItMyTurn) {
@@ -57,8 +75,8 @@ function drawPosition(context, position, isHomeBoardLeft, x, y, boardWidth, boar
 	} else {
 		diceArea = boardMap.diceOpp;
 	}
-	drawDie(context, diceArea, 1, position.die1);
-	drawDie(context, diceArea, 2, position.die2);
+	this.drawDie(context, diceArea, 1, position.die1);
+	this.drawDie(context, diceArea, 2, position.die2);
 	
 	var cubeArea;
 	// TODO find out/handle the case when cube is offered!
@@ -70,13 +88,13 @@ function drawPosition(context, position, isHomeBoardLeft, x, y, boardWidth, boar
 	} else {
 		cubeArea = boardMap.cubeOpp;
 	}
-	drawCube(context, cubeArea, position.cubeValue);
+	this.drawCube(context, cubeArea, position.cubeValue);
     
     return boardMap;
 }
 
 // index is the bg pointnumber, indexOnPoint starts with 1
-function drawChecker(context, index, indexOnPoint, isHomeBoardUp, boardMap, color){
+BgBoard.prototype.drawChecker = function(context, index, indexOnPoint, isHomeBoardUp, boardMap, color){
     var pointWidth = boardMap.pointWidth;
     var radius = boardMap.checkerRadius;
     var inset = (pointWidth - radius * 2) / 2;
@@ -91,7 +109,7 @@ function drawChecker(context, index, indexOnPoint, isHomeBoardUp, boardMap, colo
     context.fill();
 }
 
-function drawCheckerTotal(context, index, total, isHomeBoardUp, boardMap, color){
+BgBoard.prototype.drawCheckerTotal = function(context, index, total, isHomeBoardUp, boardMap, color){
     var pointWidth = boardMap.pointWidth;
     var coordinates = boardMap.getCheckerRectangle(index, 6, isHomeBoardUp);
     
@@ -101,37 +119,43 @@ function drawCheckerTotal(context, index, total, isHomeBoardUp, boardMap, color)
     context.fillText(total, coordinates.x + textInset, coordinates.y + boardMap.checkerRadius * 1.4);
 }
 
-function drawBoard(context, boardMap){
+BgBoard.prototype.drawBoard = function(context, boardMap){
     context.fillStyle = "#FFFFFF";
     context.fillRect(boardMap.x, boardMap.y, boardMap.width, boardMap.height);
     
     context.fillStyle = "#000000";
-    drawPointNumbers(context, boardMap);
+    this.drawPointNumbers(context, boardMap);
     
     context.beginPath();
     drawRect(context, boardMap.board);
-    drawBar(context, boardMap);
+    this.drawBar(context, boardMap);
+	context.closePath();
+	context.strokeStyle = "#000";
+    context.stroke();
     
+	context.beginPath();
     var pointWidth = boardMap.pointWidth;
     for (i = 0; i < 6; i++) {
-        drawPoint(context, true, boardMap.board.x, i, boardMap);
+        this.drawPoint(context, true, boardMap.board.x, i, boardMap);
     }
     for (i = 0; i < 6; i++) {
-        drawPoint(context, true, boardMap.board.x + boardMap.board.width / 2 + boardMap.bar.width / 2, i, boardMap);
+        this.drawPoint(context, true, boardMap.board.x + boardMap.board.width / 2 + boardMap.bar.width / 2, i, boardMap);
     }
     for (i = 0; i < 6; i++) {
-        drawPoint(context, false, boardMap.board.x, i, boardMap);
+        this.drawPoint(context, false, boardMap.board.x, i, boardMap);
     }
     for (i = 0; i < 6; i++) {
-        drawPoint(context, false, boardMap.board.x + boardMap.board.width / 2 + boardMap.bar.width / 2, i, boardMap);
+        this.drawPoint(context, false, boardMap.board.x + boardMap.board.width / 2 + boardMap.bar.width / 2, i, boardMap);
     }
     
     context.closePath();
-    context.strokeStyle = "#000";
+    context.fillStyle = context.createPattern(this.pointPattern, 'repeat');
+	context.strokeStyle = "#000";
     context.stroke();
+	context.fill();
 }
 
-function drawPointNumbers(context, boardMap){
+BgBoard.prototype.drawPointNumbers = function(context, boardMap){
     var fontHeight = boardMap.pointNumberHeight * 0.5;
     context.font = "bold " + fontHeight + "px sans-serif";
     
@@ -147,11 +171,11 @@ function drawPointNumbers(context, boardMap){
     }
     var baseLine = boardMap.board.y + boardMap.board.height + boardMap.pointNumberHeight * 0.6;
     var startX = boardMap.board.x;
-    draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, true);
+    this.draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, true);
     pointNumber += 6 * increment;
     
     startX = boardMap.board.x + boardMap.board.width / 2 + boardMap.bar.width / 2;
-    draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, true);
+    this.draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, true);
     
     if (boardMap.isHomeBoardLeft) {
         pointNumber = 13;
@@ -161,14 +185,14 @@ function drawPointNumbers(context, boardMap){
     }
     
     baseLine = boardMap.board.y - boardMap.pointNumberHeight * 0.25;
-    draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, false);
+    this.draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, false);
     pointNumber += 6 * increment;
     
     var startX = boardMap.board.x;
-    draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, false);
+    this.draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, false);
 }
 
-function draw6PointNumbers(context, pointNumber, pointNumberIncrement, startX, baseLine, pointWidth, fromLeftToRight){
+BgBoard.prototype.draw6PointNumbers = function(context, pointNumber, pointNumberIncrement, startX, baseLine, pointWidth, fromLeftToRight){
     var start;
     var increment;
     if (fromLeftToRight) {
@@ -189,22 +213,14 @@ function draw6PointNumbers(context, pointNumber, pointNumberIncrement, startX, b
     }
 }
 
-function drawBar(context, boardMap){
+BgBoard.prototype.drawBar = function(context, boardMap){
     context.moveTo(boardMap.bar.x, boardMap.bar.y);
     context.lineTo(boardMap.bar.x, boardMap.bar.y + boardMap.bar.height);
     context.moveTo(boardMap.bar.x + boardMap.bar.width, boardMap.bar.y);
     context.lineTo(boardMap.bar.x + boardMap.bar.width, boardMap.bar.y + boardMap.bar.height);
 }
 
-function drawRect(context, area){
-    context.moveTo(area.x, area.y);
-    context.lineTo(area.x + area.width, area.y);
-    context.lineTo(area.x + area.width, area.y + area.height);
-    context.lineTo(area.x, area.y + area.height);
-    context.lineTo(area.x, area.y);
-}
-
-function drawPoint(context, upwards, startX, index, boardMap){
+BgBoard.prototype.drawPoint = function(context, upwards, startX, index, boardMap){
     var x = startX + index * boardMap.pointWidth;
     if (upwards) {
         context.moveTo(x, boardMap.board.y);
@@ -219,7 +235,7 @@ function drawPoint(context, upwards, startX, index, boardMap){
 }
 
 // the x and y point to the left top corner of the drawing box
-function drawArrow(context, arrowArea, leftWards, color){
+BgBoard.prototype.drawArrow = function(context, arrowArea, leftWards, color){
     var direction = leftWards ? 1 : -1;
     
     var x = arrowArea.x + arrowArea.width * 0.1;
@@ -247,7 +263,7 @@ function drawArrow(context, arrowArea, leftWards, color){
     context.fill();
 }
 
-function drawCube(context, cubeArea, cubeValue) {
+BgBoard.prototype.drawCube = function(context, cubeArea, cubeValue) {
 	var cubeWidth = cubeArea.width * 0.75;
 	var cubeInset = (cubeArea.width - cubeWidth) / 2;
 	var realCubeArea = new Area();
@@ -275,7 +291,8 @@ function drawCube(context, cubeArea, cubeValue) {
     context.fillText(cubeValue, realCubeArea.x + horizontalTextInset, realCubeArea.y + verticalTextInset);
 }
 
-function getDieArea(diceArea, dieIndex) {
+// TODO make Die a class of its own?
+BgBoard.prototype.getDieArea = function(diceArea, dieIndex) {
 	var dieWidth = diceArea.height * 0.6;
 	var spaceBetweenDice = dieWidth / 4;
 	var dieXInset = (diceArea.width - 2 * dieWidth - spaceBetweenDice) / 2;
@@ -299,11 +316,11 @@ var pipCoordinates = [
 [[25, 25],[75,25],[75,75],[25,75],[25,50],[75,50]]
 ];
 
-function drawDie(context, diceArea, dieIndex, pips) {
+BgBoard.prototype.drawDie = function(context, diceArea, dieIndex, pips) {
 	if(pips == DIE_NONE) {
 		return;
 	}
-	var dieArea = getDieArea(diceArea, dieIndex);
+	var dieArea = this.getDieArea(diceArea, dieIndex);
 	fillRoundedRect(context, dieArea, dieArea.width / 8, "#FFFFFF");
 	
 	var radius = dieArea.width / 24;
@@ -312,32 +329,14 @@ function drawDie(context, diceArea, dieIndex, pips) {
 		var xy = coordinatesForPips[i];
 		var x = xy[0] * dieArea.width / 100 + dieArea.x;
 		var y = xy[1] * dieArea.height / 100 + dieArea.y;
-		drawPip(context, x, y, radius, "#000000");
+		this.drawPip(context, x, y, radius, "#000000");
 	}
 }
 
-function drawPip(context, x,  y, radius, color) {
+BgBoard.prototype.drawPip = function(context, x,  y, radius, color) {
 	context.beginPath();
 	context.arc(x, y, radius, 0, Math.PI * 2, false);
 	context.closePath();
-    context.fillStyle = color;
-    context.stroke();
-    context.fill();
-}
-
-function fillRoundedRect(context, area, cornerRadius, color){
-	var adjustedArea = area; 
-    context.beginPath();
-    context.moveTo(adjustedArea.x + cornerRadius, adjustedArea.y);
-    context.lineTo(adjustedArea.x + adjustedArea.width - cornerRadius, adjustedArea.y);
-    context.quadraticCurveTo(adjustedArea.x + adjustedArea.width, adjustedArea.y, adjustedArea.x + adjustedArea.width, adjustedArea.y + cornerRadius);
-    context.lineTo(adjustedArea.x + adjustedArea.width, adjustedArea.y + adjustedArea.height - cornerRadius);
-    context.quadraticCurveTo(adjustedArea.x + adjustedArea.width, adjustedArea.y + adjustedArea.height, adjustedArea.x + adjustedArea.width - cornerRadius, adjustedArea.y + adjustedArea.height);
-    context.lineTo(adjustedArea.x + cornerRadius, adjustedArea.y + adjustedArea.height);
-    context.quadraticCurveTo(adjustedArea.x, adjustedArea.y + adjustedArea.height, adjustedArea.x, adjustedArea.y + adjustedArea.height - cornerRadius);
-    context.lineTo(adjustedArea.x, adjustedArea.y + cornerRadius);
-    context.quadraticCurveTo(adjustedArea.x, adjustedArea.y, adjustedArea.x + cornerRadius, adjustedArea.y);
-    context.closePath();
     context.fillStyle = color;
     context.stroke();
     context.fill();

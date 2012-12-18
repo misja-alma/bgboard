@@ -17,32 +17,6 @@ Item.prototype.clone = function(){
     return newItem;
 };
 
-function Area(){
-    var x;
-    var y;
-    var width;
-    var height;
-}
-
-Area.prototype.contains = function(x, y){
-    if (x >= this.x && x < this.x + this.width) {
-        if (y >= this.y && y < this.y + this.height) {
-            return true;
-        }
-    }
-    return false;
-}
-
-Area.prototype.clone = function(){
-    var newArea = new Area();
-    newArea.x = this.x;
-    newArea.y = this.y;
-    newArea.width = this.width;
-    newArea.height = this.height;
-    
-    return newArea;
-};
-
 var AREA_BAR = "BAR";
 var AREA_TURN = "TURN";
 var AREA_CHECKER = "CHECKER";
