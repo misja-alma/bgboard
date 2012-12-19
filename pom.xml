@@ -38,6 +38,7 @@
                     <jsSrcDir>src/main/javascript</jsSrcDir>
                     <jsTestSrcDir>src/test/javascript</jsTestSrcDir>
                 </configuration>
+                <extensions>true</extensions>
             </plugin>
  
  
