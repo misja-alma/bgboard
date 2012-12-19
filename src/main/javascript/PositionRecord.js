@@ -573,7 +573,7 @@ var makeBase64String = function(bitString, length){
                 var bit = bitString[bitIndex];
                 var bitPos = indexOf(positions, d);
                 var bytePos = Math.floor(bitPos / 6);
-                this.setBit(result, c * 4 + bytePos, bitPos % 6, bit);
+                setBit(result, c * 4 + bytePos, bitPos % 6, bit);
             }
         }
     }
