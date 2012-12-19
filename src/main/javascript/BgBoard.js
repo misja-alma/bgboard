@@ -8,15 +8,15 @@ function BgBoard() {
 
 BgBoard.prototype.setPointPatternImage = function(pointPatternImage) {
 	this.pointPattern = pointPatternImage;
-}
+};
 
 BgBoard.prototype.setMyCheckerColor = function(color) {
 	this.myCheckerColor = color;
-}
+};
 
 BgBoard.prototype.setOppCheckerColor = function(color) {
 	this.oppCheckerColor = color;
-}
+};
 
 // myCheckers and oppCheckers contain the nr's of checkers for each player on each point on the board. Points are numbered from the player's own orientation
 BgBoard.prototype.drawPosition = function(context, position, isHomeBoardLeft, x, y, boardWidth, boardHeight){
@@ -91,7 +91,7 @@ BgBoard.prototype.drawPosition = function(context, position, isHomeBoardLeft, x,
 	this.drawCube(context, cubeArea, position.cubeValue);
     
     return boardMap;
-}
+};
 
 // index is the bg pointnumber, indexOnPoint starts with 1
 BgBoard.prototype.drawChecker = function(context, index, indexOnPoint, isHomeBoardUp, boardMap, color){
@@ -107,7 +107,7 @@ BgBoard.prototype.drawChecker = function(context, index, indexOnPoint, isHomeBoa
     context.closePath();
     context.stroke();
     context.fill();
-}
+};
 
 BgBoard.prototype.drawCheckerTotal = function(context, index, total, isHomeBoardUp, boardMap, color){
     var pointWidth = boardMap.pointWidth;
@@ -117,7 +117,7 @@ BgBoard.prototype.drawCheckerTotal = function(context, index, total, isHomeBoard
     var textWidth = context.measureText(total).width;
     var textInset = (pointWidth - textWidth) / 2;
     context.fillText(total, coordinates.x + textInset, coordinates.y + boardMap.checkerRadius * 1.4);
-}
+};
 
 BgBoard.prototype.drawBoard = function(context, boardMap){
     context.fillStyle = "#FFFFFF";
@@ -153,7 +153,7 @@ BgBoard.prototype.drawBoard = function(context, boardMap){
 	context.strokeStyle = "#000";
     context.stroke();
 	context.fill();
-}
+};
 
 BgBoard.prototype.drawPointNumbers = function(context, boardMap){
     var fontHeight = boardMap.pointNumberHeight * 0.5;
@@ -190,7 +190,7 @@ BgBoard.prototype.drawPointNumbers = function(context, boardMap){
     
     var startX = boardMap.board.x;
     this.draw6PointNumbers(context, pointNumber, increment, startX, baseLine, boardMap.pointWidth, false);
-}
+};
 
 BgBoard.prototype.draw6PointNumbers = function(context, pointNumber, pointNumberIncrement, startX, baseLine, pointWidth, fromLeftToRight){
     var start;
@@ -211,14 +211,14 @@ BgBoard.prototype.draw6PointNumbers = function(context, pointNumber, pointNumber
         context.fillText(pointNumber, startX + i * pointWidth + textInset, baseLine);
         pointNumber += pointNumberIncrement;
     }
-}
+};
 
 BgBoard.prototype.drawBar = function(context, boardMap){
     context.moveTo(boardMap.bar.x, boardMap.bar.y);
     context.lineTo(boardMap.bar.x, boardMap.bar.y + boardMap.bar.height);
     context.moveTo(boardMap.bar.x + boardMap.bar.width, boardMap.bar.y);
     context.lineTo(boardMap.bar.x + boardMap.bar.width, boardMap.bar.y + boardMap.bar.height);
-}
+};
 
 BgBoard.prototype.drawPoint = function(context, upwards, startX, index, boardMap){
     var x = startX + index * boardMap.pointWidth;
@@ -232,7 +232,7 @@ BgBoard.prototype.drawPoint = function(context, upwards, startX, index, boardMap
         context.lineTo(x + boardMap.pointWidth / 2, boardMap.board.y + boardMap.board.height - boardMap.pointHeight);
         context.lineTo(x + boardMap.pointWidth, boardMap.board.y + boardMap.board.height);
     }
-}
+};
 
 // the x and y point to the left top corner of the drawing box
 BgBoard.prototype.drawArrow = function(context, arrowArea, leftWards, color){
@@ -261,7 +261,7 @@ BgBoard.prototype.drawArrow = function(context, arrowArea, leftWards, color){
     context.fillStyle = color;
     context.stroke();
     context.fill();
-}
+};
 
 BgBoard.prototype.drawCube = function(context, cubeArea, cubeValue) {
 	var cubeWidth = cubeArea.width * 0.75;
@@ -289,7 +289,7 @@ BgBoard.prototype.drawCube = function(context, cubeArea, cubeValue) {
 	var verticalTextInset = cubeWidth/2 + fontHeight/4;
 	context.fillStyle = "#000000";
     context.fillText(cubeValue, realCubeArea.x + horizontalTextInset, realCubeArea.y + verticalTextInset);
-}
+};
 
 // TODO make Die a class of its own?
 BgBoard.prototype.getDieArea = function(diceArea, dieIndex) {
@@ -305,7 +305,7 @@ BgBoard.prototype.getDieArea = function(diceArea, dieIndex) {
 	dieArea.width = dieWidth;
 	dieArea.height = dieWidth;
 	return dieArea;
-}
+};
 
 var pipCoordinates = [
 [[50, 50]],
@@ -331,7 +331,7 @@ BgBoard.prototype.drawDie = function(context, diceArea, dieIndex, pips) {
 		var y = xy[1] * dieArea.height / 100 + dieArea.y;
 		this.drawPip(context, x, y, radius, "#000000");
 	}
-}
+};
 
 BgBoard.prototype.drawPip = function(context, x,  y, radius, color) {
 	context.beginPath();
@@ -340,4 +340,4 @@ BgBoard.prototype.drawPip = function(context, x,  y, radius, color) {
     context.fillStyle = color;
     context.stroke();
     context.fill();
-}
+};

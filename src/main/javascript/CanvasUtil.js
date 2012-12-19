@@ -12,7 +12,7 @@ Area.prototype.contains = function(x, y){
         }
     }
     return false;
-}
+};
 
 Area.prototype.clone = function(){
     var newArea = new Area();
@@ -22,7 +22,7 @@ Area.prototype.clone = function(){
     newArea.height = this.height;
     
     return newArea;
-}
+};
 
 function fillRoundedRect(context, area, cornerRadius, color){
 	var adjustedArea = area; 

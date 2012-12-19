@@ -180,7 +180,7 @@ BoardMap.prototype.locateChecker = function(item, x, y){
         }
     }
     return false;
-}
+};
 
 var CUBELOCATION_OWNED = "CUBE_OWNED";
 var CUBELOCATION_MIDDLE = "CUBE_MIDDLE";
@@ -217,7 +217,7 @@ BoardMap.prototype.locateCube = function(item, x, y){
 		return true;
 	}
 	return false;
-}
+};
 
 BoardMap.prototype.locateDice = function(item, x, y){
     if (this.diceMe.contains(x, y)) {
@@ -231,7 +231,7 @@ BoardMap.prototype.locateDice = function(item, x, y){
         return true;
     }
     return false;
-}
+};
 
 BoardMap.prototype.locateBearOff = function(item, x, y){
     if (this.zeroPointMe.contains(x, y)) {
@@ -248,7 +248,7 @@ BoardMap.prototype.locateBearOff = function(item, x, y){
         return true;
     }
     return false;
-}
+};
 
 BoardMap.prototype.locateBar = function(item, x, y){
     // Counting of the height starts from the middle of the bar
@@ -266,7 +266,7 @@ BoardMap.prototype.locateBar = function(item, x, y){
         return true;
     }
     return false;
-}
+};
 
 BoardMap.prototype.locateTurn = function(item, x, y){
     if (this.arrowMyTurn.contains(x, y)) {
@@ -280,7 +280,7 @@ BoardMap.prototype.locateTurn = function(item, x, y){
         return true;
     }
     return false;
-}
+};
 
 // Returns the outer-rectangle starting at the topleftcorner of the checker; includes the checker + its insets
 BoardMap.prototype.getCheckerRectangle = function(index, indexOnPoint, isHomeBoardUp){
@@ -327,7 +327,7 @@ BoardMap.prototype.getCheckerRectangle = function(index, indexOnPoint, isHomeBoa
         }
     }
     return rec;
-}
+};
 
 BoardMap.prototype.getPointArea = function(index, isHomeBoardUp){
     var rec;
@@ -390,18 +390,18 @@ BoardMap.prototype.getPointArea = function(index, isHomeBoardUp){
     }
     
     return rec;
-}
+};
 
 BoardMap.prototype.getPointWidth = function(boardWidth){
     var barWidth = this.getBarWidth(boardWidth);
     var pointWidth = (boardWidth - barWidth) / 12;
     return pointWidth;
-}
+};
 
 BoardMap.prototype.getBarWidth = function(boardWidth){
     var barWidth = boardWidth / 12;
     return barWidth;
-}
+};
 
 BoardMap.prototype.locateItem = function(x, y){
     var item = new Item();
@@ -432,4 +432,4 @@ BoardMap.prototype.locateItem = function(x, y){
         return item;
     }
     return item;
-}
+};

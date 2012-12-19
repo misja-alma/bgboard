@@ -1,25 +1,25 @@
 "use strict";
 
-CENTERED_CUBE = 3;
+var CENTERED_CUBE = 3;
 
-GAMESTATE_NOGAMESTARTED = 0;
-GAMESTATE_PLAYING = 1;
-GAMESTATE_GAMEOVER = 2;
-GAMESTATE_RESIGNED = 3;
-GAMESTATE_ENDBYCUBEDROP = 4;
+var GAMESTATE_NOGAMESTARTED = 0;
+var GAMESTATE_PLAYING = 1;
+var GAMESTATE_GAMEOVER = 2;
+var GAMESTATE_RESIGNED = 3;
+var GAMESTATE_ENDBYCUBEDROP = 4;
 
-RESIGNATION_NONE = 0;
-RESIGNATION_SINGLE = 1;
-RESIGNATION_GAMMON = 2;
-RESIGNATION_BACKGAMMON = 3;
+var RESIGNATION_NONE = 0;
+var RESIGNATION_SINGLE = 1;
+var RESIGNATION_GAMMON = 2;
+var RESIGNATION_BACKGAMMON = 3;
 
-DIE_NONE = 0;
+var DIE_NONE = 0;
 
 // tables used by match- and positionId code
-base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-positions = new Array(2, 3, 4, 5, 6, 7, 12, 13, 14, 15, 0, 1, 22, 23, 8, 9, 10, 11, 16, 17, 18, 19, 20, 21);
+var base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+var positions = new Array(2, 3, 4, 5, 6, 7, 12, 13, 14, 15, 0, 1, 22, 23, 8, 9, 10, 11, 16, 17, 18, 19, 20, 21);
 
-createInitialPosition = function(){
+var createInitialPosition = function(){
     var position = new PositionRecord();
     position.setNrCheckersOnPoint(0, 6, 5);
     position.setNrCheckersOnPoint(0, 8, 3);
@@ -37,14 +37,14 @@ createInitialPosition = function(){
     position.cubeValue = 1;
 	position.gameState = GAMESTATE_NOGAMESTARTED;
     return position;
-}
+};
 
 /**
  * Returns a position with all checkers off for both players
  *
  * @return a valid PositionRecord
  */
-createFinalPosition = function(){
+var createFinalPosition = function(){
     var position = new PositionRecord();
     position.setNrCheckersOnPoint(0, 0, 15);
     position.setNrCheckersOnPoint(1, 0, 15);
@@ -53,7 +53,7 @@ createFinalPosition = function(){
     position.playerOnRoll = 1;
     position.cubeValue = 1;
     return position;
-}
+};
 
 
 /**
@@ -65,15 +65,15 @@ createFinalPosition = function(){
  * @param end the first bit that is not part of the substring anymore; end > start
  * @return the accumulated value of the bitRange
  */
-bitSubString = function(bitString, start, end){
+var bitSubString = function(bitString, start, end){
     var result = bitString[--end];
     while (start < end) {
         result = 2 * result + bitString[--end];
     }
     return result;
-}
+};
 
-putIntoBitString = function(bitString, value, start, end){
+var putIntoBitString = function(bitString, value, start, end){
     var pos = start;
     var mask = 1;
     while (pos <= (end - 1)) {
@@ -81,7 +81,7 @@ putIntoBitString = function(bitString, value, start, end){
         mask = mask * 2;
         pos++;
     }
-}
+};
 
 function PositionRecord(){
     this.checkers; // [][] index 0 is the player: 0 or 1. Index 1 counts the points
@@ -122,7 +122,7 @@ PositionRecord.prototype.decodeChar = function(character){
         info.nrCheckers = ch + 1;
     }
     return info;
-}
+};
 
 PositionRecord.prototype.setDefaultValues = function() {
 	this.checkers = []; // 2, 26
@@ -143,7 +143,7 @@ PositionRecord.prototype.setDefaultValues = function() {
     this.matchScore = [0,0]; 
     this.player1Name;
     this.player2Name;
-}
+};
 
 PositionRecord.prototype.initializeFromXGId = function(xgId){
 	xgId = trim(xgId);
@@ -246,7 +246,7 @@ PositionRecord.prototype.initializeFromXGId = function(xgId){
 		this.crawFord = false;
 	}
 	// maxcube is not used
-}
+};
 
 /**
  * Intitializes the position record with the data stored in the both id's.
@@ -304,7 +304,7 @@ PositionRecord.prototype.initializeFromId = function(posId, matchId){
             nrOnPoint++;
         }
     }
-}
+};
 
 /**
  * Convenience method.
@@ -337,7 +337,7 @@ PositionRecord.prototype.isDoublePossible = function(onlyMeaningfulDoubles){
             return true;
         }
     }
-}
+};
 
 /**
  * Convenience method.
@@ -350,7 +350,7 @@ PositionRecord.prototype.haveDiceBeenRolled = function(){
     if ((this.die2 != 0) && (this.die2 != 7)) 
         return true;
     return false;
-}
+};
 
 /**
  * Parses the checkerplay string and move the checkers as specified in the move
@@ -378,7 +378,7 @@ PositionRecord.prototype.moveCheckers = function(playerToMove, checkerPlay){
             pos = nextSpace + 1;
         }
     }
-}
+};
 
 PositionRecord.prototype.moveOneChecker = function(playerToMove, checkerPlay){
     var slash = checkerPlay.indexOf('/');
@@ -417,7 +417,7 @@ PositionRecord.prototype.moveOneChecker = function(playerToMove, checkerPlay){
         checkers[playerNotOnRoll][25 - endPoint]--;
         checkers[playerNotOnRoll][25]++;
     }
-}
+};
 
 /**
  * Parses a string representation of a point into an index within the checkers arrays
@@ -435,9 +435,9 @@ PositionRecord.prototype.parsePoint = function(point){
     else {
         return Integer.parseInt(point);
     }
-}
+};
 
-base64ToBits = function(s, length){
+var base64ToBits = function(s, length){
     // first transform the match id into a bit array
     var bits = new Array();
     var bytes = stringToBytes(s);
@@ -460,7 +460,7 @@ base64ToBits = function(s, length){
         }
     }
     return bits;
-}
+};
 
 PositionRecord.prototype.dissectMatchId = function(matchId){
     // the matchId string looks as follows:
@@ -490,7 +490,7 @@ PositionRecord.prototype.dissectMatchId = function(matchId){
     this.matchScore = new Array();
     this.matchScore[0] = bitSubString(bits, 36, 51);
     this.matchScore[1] = bitSubString(bits, 51, 66);
-}
+};
 
 /**
  *
@@ -520,7 +520,7 @@ PositionRecord.prototype.getPositionId = function(){
     }
     // turn it into characters
     return makeBase64String(bits, 14);
-}
+};
 
 /**
  * @return the 2-log of the cube
@@ -533,7 +533,7 @@ PositionRecord.prototype.getTwoLogOfCube = function(){
         twoLog++;
     }
     return twoLog;
-}
+};
 
 /**
  * @return the gnu match id
@@ -556,9 +556,9 @@ PositionRecord.prototype.getMatchId = function(){
     putIntoBitString(bits, this.matchScore[1], 51, 66);
     
     return makeBase64String(bits, 12);
-}
+};
 
-makeBase64String = function(bitString, length){
+var makeBase64String = function(bitString, length){
     var result = [];
 	for(var i=0; i<length; i++) {
 		result[i] = 0;
@@ -584,9 +584,9 @@ makeBase64String = function(bitString, length){
         res[i] = base64.charAt(result[i]);
     }
     return res.join("");
-}
+};
 
-setBit = function(byteStr, index, bitPos, value){
+var setBit = function(byteStr, index, bitPos, value){
     var mask = Math.pow(2, bitPos);
     if (value == 1) {
         byteStr[index] = (byteStr[index] | mask);
@@ -594,7 +594,7 @@ setBit = function(byteStr, index, bitPos, value){
     else {
         byteStr[index] = (byteStr[index] & (~ mask));
     }
-}
+};
 
 /**
  * If matchLength <> 0 and a score >= matchLength, this score will be reset to zero
@@ -606,7 +606,7 @@ PositionRecord.prototype.validateScores = function(){
         if (this.matchScore[1] >= this.matchLength) 
             this.matchScore[1] = 0;
     }
-}
+};
 
 /**
  *
@@ -619,7 +619,7 @@ PositionRecord.prototype.isCrawfordPossible = function(){
     else {
         return true;
     }
-}
+};
 
 /**
  * If crawford is true, this method will reset it if crawford is not applicable to this matchscore
@@ -630,7 +630,7 @@ PositionRecord.prototype.validateCrawford = function(){
             this.crawford = false;
         }
     }
-}
+};
 
 /**
  *
@@ -640,18 +640,18 @@ PositionRecord.prototype.validateCrawford = function(){
  */
 PositionRecord.prototype.getNrCheckersOnPoint = function(player, point){
     return this.checkers[player][point];
-}
+};
 
 PositionRecord.prototype.setNrCheckersOnPoint = function(player, point, nr){
     this.checkers[player][point] = nr;
-}
+};
 
 PositionRecord.prototype.switchTurn = function() {
 	this.decisionTurn = this.decisionTurn == 0? 1: 0;
 	if (!this.cubeOffered) {
 		this.playerOnRoll = this.playerOnRoll == 0 ? 1 : 0; 
 	}
-}
+};
 
 PositionRecord.prototype.clone = function(){
     var p2 = new PositionRecord();
@@ -679,11 +679,11 @@ PositionRecord.prototype.clone = function(){
     p2.resignation = this.resignation;
     
     return p2;
-}
+};
 
 PositionRecord.prototype.arrayCopy = function(ar1, start1, ar2, start2, length){
     for (var i = 0; i < length; i++) {
         ar2[start2++] = ar1[start1++];
     }
-}
+};
 

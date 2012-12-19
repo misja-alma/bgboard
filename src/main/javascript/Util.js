@@ -8,15 +8,15 @@ function trim(s) {
 }
 
 
-indexOf = function(ar, p){
+var indexOf = function(ar, p){
     for (var i = 0; i < ar.length; i++) {
         if (ar[i] == p) 
             return i;
     }
     return -1;
-}
+};
 
-stringToBytes = function(str){
+var stringToBytes = function(str){
     var ch, st, re = [];
     for (var i = 0; i < str.length; i++) {
         ch = str.charCodeAt(i); // get char 
@@ -32,4 +32,4 @@ stringToBytes = function(str){
     }
     // return an array of bytes
     return re;
-}
+};

@@ -18,15 +18,15 @@ function BgBoardController(boardName){
 
 BgBoardController.prototype.setDirection = function(shouldHomeBoardBeLeft){
     this.isHomeBoardLeft = shouldHomeBoardBeLeft;
-}
+};
 
 BgBoardController.prototype.switchTurn = function(){
     this.currentPosition.switchTurn();
-}
+};
 
 BgBoardController.prototype.getBoard = function(){
     return this.bgBoard;
-}
+};
 
 BgBoardController.prototype.handleClick = function(x, y){
     var item = this.boardMap.locateItem(x, y);
@@ -34,7 +34,7 @@ BgBoardController.prototype.handleClick = function(x, y){
         this.switchTurn();
         this.draw(this.currentPosition);
     }
-}
+};
 
 function boardClicked(event){
     var x;
@@ -58,7 +58,7 @@ BgBoardController.prototype.draw = function(position){
     this.currentPosition = position;
     var context = this.board.getContext("2d");
     this.boardMap = this.bgBoard.drawPosition(context, position, this.isHomeBoardLeft, 0, 0, 500, 400);
-}
+};
 
 function parseBgId(id){
     var position = new PositionRecord();
